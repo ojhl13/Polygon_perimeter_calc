@@ -16,28 +16,28 @@ public class Vertex {
 
     Vertex ()
     {
-        this.x = 0;
-        this.y = 0;
+        x = 0;
+        y = 0;
     }
-    Vertex(float x, float y)
+    Vertex(float x1, float y1)
     {
-        this.x = x;
-        this.y = y;
+        x = x1;
+        y = y1;
     }
-    static float GetX()
+     float GetX()
     {
-        return Vertex.x;
+        return x;
     }
-    static float GetY()
+    float GetY()
     {
-        return Vertex.y;
+        return y;
     }
     
-    static void UpdateVertex(float x, float y)
+    static void UpdateVertex(float x2, float y2)
     {
          System.out.println("entre");
-        Vertex.x = x;
-        Vertex.y = y;
+        x = x2;
+        y = y2;
     }
     
 }

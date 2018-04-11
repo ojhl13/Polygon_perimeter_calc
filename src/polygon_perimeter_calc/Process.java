@@ -55,6 +55,10 @@ public class Process
     {
         return String.valueOf(P.calcPerimeter());
     }
+    void printlast()
+    {
+        P.printLastVertex();
+    }
     
     
 }

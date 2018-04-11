@@ -14,11 +14,11 @@ package polygon_perimeter_calc;
  */
 public class Polygon {
     private Vertex []  arrayV ;
-    private int index;
+    private int index=0;
     public Polygon ()
     {
         arrayV = new Vertex[100];
-        index=0;
+       
 
         
         
@@ -27,21 +27,30 @@ public class Polygon {
     boolean setNewVertex(float x, float y)
     {
         boolean result =false;
+        int temp=0;
+        
         if( 100 > index)
         {
             if(0 != index){
-                if((x != arrayV[index--].GetX()) && (y != arrayV[index--].GetY()))
+                temp=index-1;
+                
+                if((x != arrayV[temp].x) || (y != arrayV[temp].y)) {
+                        arrayV[index].UpdateVertex(x, y);
+                        index ++;
+                        result = true;
+                    }
+                else
                 {
-                    arrayV[index].UpdateVertex(x, y);
-                    index ++;
-                    result = true;
-            
+                    System.err.println("Dato Repetido");
                 }
+            
+                
                 
             }
             else
             {
                 arrayV[index].UpdateVertex(x, y);
+                System.out.println();
                     index ++;
                     result = true;
             }
@@ -61,20 +70,30 @@ public class Polygon {
         
         
     }
+    void printLastVertex()
+    {
+        String str;
+        str = "X: " + String.valueOf(arrayV[index].x) + " Y:" + (String.valueOf(arrayV[index].y)) ;
+        System.out.println(str);
+    }
 
     float calcPerimeter() 
     {
         float result=0;
-        
-        for (int i = 0; i < index-1; i++) {
-            
-            
-            float a = arrayV[i].GetX() + arrayV[i++].GetX();
-            float b = arrayV[i].GetY() + arrayV[i++].GetY();
+        int i2=0;
+        for (int i = 0; i < index-1; i++) 
+        {
+            i2=i+1;
+            System.out.println(String.valueOf(arrayV[i].x));
+            System.out.println(String.valueOf(arrayV[i].y));
+            float a  = arrayV[i2].x ;
+                  a -= arrayV[i].x;
+            float b  = arrayV[i2].y ;
+                  b -= arrayV[i].y;
                 
         
             result += ((float) Math.sqrt(((Math.pow(a,2))+(Math.pow(b,2)))));
-        
+         
             
             
         }

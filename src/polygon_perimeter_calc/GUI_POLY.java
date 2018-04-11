@@ -244,9 +244,20 @@ public class GUI_POLY extends javax.swing.JFrame {
 
     private void bEraseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bEraseMouseClicked
         // TODO add your handling code here:
+        if(indexlist > 0){
         process.P.eeraseLastVertex();
-        datalist.remove(indexlist);
         indexlist--;
+        datalist.remove((indexlist));
+        }
+//        if( indexlist == 0)
+//        {
+//            datalist.remove((indexlist));
+//        }
+        else 
+        {
+            System.err.println("NO mas por borrar");
+        }
+        
     }//GEN-LAST:event_bEraseMouseClicked
 
     private void bADDMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bADDMouseClicked
@@ -256,6 +267,7 @@ public class GUI_POLY extends javax.swing.JFrame {
         {
         String vertice = "X: ".concat(tfX.getText()).concat(" Y: ").concat(tfY.getText());
         datalist.addElement(vertice);
+        process.printlast();
         indexlist++;
         list_Vertexs.setModel(datalist);
         }
