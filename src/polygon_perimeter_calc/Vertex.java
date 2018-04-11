@@ -11,8 +11,8 @@ package polygon_perimeter_calc;
  */
 
 public class Vertex {
-    private float x;
-    private float y;
+     static float x;
+     static float y;
 
     Vertex ()
     {
@@ -24,13 +24,20 @@ public class Vertex {
         this.x = x;
         this.y = y;
     }
-    float GetX()
+    static float GetX()
     {
-        return this.x;
+        return Vertex.x;
     }
-    float GetY()
+    static float GetY()
     {
-        return this.y;
+        return Vertex.y;
+    }
+    
+    static void UpdateVertex(float x, float y)
+    {
+         System.out.println("entre");
+        Vertex.x = x;
+        Vertex.y = y;
     }
     
 }

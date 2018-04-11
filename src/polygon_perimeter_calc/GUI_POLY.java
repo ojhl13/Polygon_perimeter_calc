@@ -5,8 +5,10 @@
  */
 package polygon_perimeter_calc;
 
+import java.awt.Component;
 import java.awt.MouseInfo;
 import java.awt.Point;
+import javax.swing.DefaultListModel;
 
 /**
  *
@@ -18,10 +20,17 @@ public class GUI_POLY extends javax.swing.JFrame {
      * Creates new form GUI_POLY
      */
     Point punto;
+    private DefaultListModel datalist;
     int x,y;
+    int indexlist=0;
     public GUI_POLY() {
+        this.process = new Process();
+        datalist = new DefaultListModel();
         initComponents();
+        
     }
+    Process process ;
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -40,23 +49,23 @@ public class GUI_POLY extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        tfX = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        tfY = new javax.swing.JTextField();
         jPanel5 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
+        bErase = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
+        bADD = new javax.swing.JButton();
         jPanel9 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
+        tfResult = new javax.swing.JTextField();
         jPanel11 = new javax.swing.JPanel();
-        jButton3 = new javax.swing.JButton();
+        bCalc = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
-        jButton4 = new javax.swing.JButton();
+        bGraph = new javax.swing.JButton();
         jPanel8 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
+        list_Vertexs = new javax.swing.JList<>();
         jLabel5 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         canvas1 = new java.awt.Canvas();
@@ -76,24 +85,36 @@ public class GUI_POLY extends javax.swing.JFrame {
 
         jPanel1.setLayout(new java.awt.GridLayout(2, 2, 1, 0));
 
+        jLabel1.setLabelFor(tfX);
         jLabel1.setText("Cordenada X");
         jPanel1.add(jLabel1);
-        jPanel1.add(jTextField1);
+        jPanel1.add(tfX);
 
+        jLabel2.setLabelFor(tfY);
         jLabel2.setText("Cordenada Y");
         jPanel1.add(jLabel2);
-        jPanel1.add(jTextField2);
+        jPanel1.add(tfY);
 
         jPanel4.add(jPanel1);
 
-        jPanel5.setLayout(new java.awt.GridLayout());
+        jPanel5.setLayout(new java.awt.GridLayout(1, 0));
 
-        jButton1.setText("Borrar");
-        jPanel5.add(jButton1);
+        bErase.setText("Borrar");
+        bErase.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                bEraseMouseClicked(evt);
+            }
+        });
+        jPanel5.add(bErase);
         jPanel5.add(jLabel4);
 
-        jButton2.setText("Agregar");
-        jPanel5.add(jButton2);
+        bADD.setText("Agregar");
+        bADD.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                bADDMouseClicked(evt);
+            }
+        });
+        jPanel5.add(bADD);
 
         jPanel4.add(jPanel5);
 
@@ -105,26 +126,32 @@ public class GUI_POLY extends javax.swing.JFrame {
         jLabel6.setText("Perimetro");
         jPanel9.add(jLabel6);
 
-        jTextField3.addActionListener(new java.awt.event.ActionListener() {
+        tfResult.setEditable(false);
+        tfResult.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField3ActionPerformed(evt);
+                tfResultActionPerformed(evt);
             }
         });
-        jPanel9.add(jTextField3);
+        jPanel9.add(tfResult);
 
         jPanel11.setLayout(new java.awt.GridLayout(1, 3));
 
-        jButton3.setText("Calcular");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+        bCalc.setText("Calcular");
+        bCalc.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                bCalcMouseClicked(evt);
             }
         });
-        jPanel11.add(jButton3);
+        bCalc.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bCalcActionPerformed(evt);
+            }
+        });
+        jPanel11.add(bCalc);
         jPanel11.add(jSeparator1);
 
-        jButton4.setText("Graficar");
-        jPanel11.add(jButton4);
+        bGraph.setText("Graficar");
+        jPanel11.add(bGraph);
 
         jPanel9.add(jPanel11);
 
@@ -132,12 +159,7 @@ public class GUI_POLY extends javax.swing.JFrame {
 
         jPanel6.add(jPanel7);
 
-        jList1.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane1.setViewportView(jList1);
+        jScrollPane1.setViewportView(list_Vertexs);
 
         jLabel5.setText("Lista de vertices");
 
@@ -206,19 +228,43 @@ public class GUI_POLY extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 419, Short.MAX_VALUE)
+            .addComponent(jTabbedPane1)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
+    private void tfResultActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfResultActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField3ActionPerformed
+    }//GEN-LAST:event_tfResultActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void bCalcActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bCalcActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_bCalcActionPerformed
+
+    private void bEraseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bEraseMouseClicked
+        // TODO add your handling code here:
+        process.P.eeraseLastVertex();
+        datalist.remove(indexlist);
+        indexlist--;
+    }//GEN-LAST:event_bEraseMouseClicked
+
+    private void bADDMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bADDMouseClicked
+        // TODO add your handling code here:
+       
+        if(process.addNewData( tfX.getText() , tfY.getText() ))
+        {
+        String vertice = "X: ".concat(tfX.getText()).concat(" Y: ").concat(tfY.getText());
+        datalist.addElement(vertice);
+        indexlist++;
+        list_Vertexs.setModel(datalist);
+        }
+    }//GEN-LAST:event_bADDMouseClicked
+
+    private void bCalcMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bCalcMouseClicked
+        // TODO add your handling code here:
+        tfResult.setText(process.printResult());
+    }//GEN-LAST:event_bCalcMouseClicked
 
     /**
      * @param args the command line arguments
@@ -256,18 +302,17 @@ public class GUI_POLY extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton bADD;
+    private javax.swing.JButton bCalc;
+    private javax.swing.JButton bErase;
+    private javax.swing.JButton bGraph;
     private java.awt.Canvas canvas1;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JList<String> jList1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel2;
@@ -281,8 +326,9 @@ public class GUI_POLY extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
+    private javax.swing.JList<String> list_Vertexs;
+    private javax.swing.JTextField tfResult;
+    private javax.swing.JTextField tfX;
+    private javax.swing.JTextField tfY;
     // End of variables declaration//GEN-END:variables
 }
